@@ -1,0 +1,19 @@
+# Build files
+*.o
+*.out
+*.exe
+
+# Executables
+server
+client
+
+# Build directories
+build/
+bin/
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
