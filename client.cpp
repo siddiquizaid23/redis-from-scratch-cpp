@@ -67,7 +67,7 @@ static int32_t write_all(int fd, const char *buf, size_t n)
 
 static int32_t send_req(int fd, const std::vector<std::string> &cmd)
 {
-    // body = [4 bytes: num_strings] + for each string [4 bytes: len][bytes]
+    
     uint32_t len = 4;
     for (const std::string &s : cmd)
     {
@@ -80,14 +80,14 @@ static int32_t send_req(int fd, const std::vector<std::string> &cmd)
 
     char wbuf[4 + k_max_msg];
 
-    // outer length header — how many bytes follow
+  
     memcpy(&wbuf[0], &len, 4);
 
-    // num_strings
+ 
     uint32_t n = (uint32_t)cmd.size();
     memcpy(&wbuf[4], &n, 4);
 
-    // each string: [4-byte length][bytes]
+    
     size_t cur = 8;
     for (const std::string &s : cmd)
     {
@@ -98,9 +98,7 @@ static int32_t send_req(int fd, const std::vector<std::string> &cmd)
         cur += s.size();
     }
 
-    // send exactly cur bytes — outer_header(4) + body(len)
-    // cur == 4 + len always, but use cur to be exact
-    return write_all(fd, wbuf, cur);
+   
 }
 
 static int32_t parse_res(const uint8_t *data, size_t size)
@@ -273,8 +271,8 @@ int main()
     cmd(fd, {"GET", "temp"});
     printf("waiting 3 seconds...\n");
     sleep(3);
-    cmd(fd, {"GET", "temp"}); // should be nil
-    cmd(fd, {"TTL", "temp"}); // should be -2
+    cmd(fd, {"GET", "temp"}); 
+    cmd(fd, {"TTL", "temp"}); 
 
     printf("\n=== Sorted Set ===\n");
     cmd(fd, {"ZADD", "scores", "100", "Alice"});
