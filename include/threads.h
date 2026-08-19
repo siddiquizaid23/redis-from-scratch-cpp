@@ -54,7 +54,7 @@ struct ThreadPool{
 }
  }
 
- static void thread_pool_queue(ThreadPool *pool,void(*f)(void *),void *arg){
+ [[maybe_unused]] static void thread_pool_queue(ThreadPool *pool,void(*f)(void *),void *arg){
     Work w;
     w.f =f ;
     w.arg = arg;

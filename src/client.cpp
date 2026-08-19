@@ -98,7 +98,7 @@ static int32_t send_req(int fd, const std::vector<std::string> &cmd)
         cur += s.size();
     }
 
-   
+    return write_all(fd, wbuf, 4 + len);
 }
 
 static int32_t parse_res(const uint8_t *data, size_t size)

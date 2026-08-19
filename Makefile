@@ -1,14 +1,15 @@
 CXX      = g++
-CXXFLAGS = -Wall -Wextra -O2 -std=c++17 -g
+CXXFLAGS = -Wall -Wextra -O2 -std=c++17 -g -I./include
+#                                          ↑ tells compiler to look in include/
 LDFLAGS  = -lpthread
 
 all: server client
 
-server: server.cpp avl.h hashtable.h zset.h threads.h
-	$(CXX) $(CXXFLAGS) server.cpp $(LDFLAGS) -o server
+server: src/server.cpp include/avl.h include/hashtable.h include/zset.h include/threads.h
+	$(CXX) $(CXXFLAGS) src/server.cpp $(LDFLAGS) -o server
 
-client: client.cpp
-	$(CXX) $(CXXFLAGS) client.cpp -o client
+client: src/client.cpp
+	$(CXX) $(CXXFLAGS) src/client.cpp -o client
 
 clean:
 	rm -f server client

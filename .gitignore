@@ -1,19 +1,16 @@
-# Build files
-*.o
-*.out
-*.exe
-
-# Executables
+cat > .gitignore << 'EOF'
+# compiled binaries
 server
 client
+test_avl
 
-# Build directories
-build/
-bin/
+# object files
+*.o
 
 # VS Code
 .vscode/
 
-# OS files
-.DS_Store
-Thumbs.db
+# build artifacts
+*.out
+*.dSYM
+EOF

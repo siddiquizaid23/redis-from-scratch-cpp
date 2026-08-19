@@ -1,35 +1,35 @@
-// ─── INCLUDES ────────────────────────────────────────────────────────────────
-#include <stdint.h>     // uint32_t, int32_t, uint64_t
-#include <stdlib.h>     // calloc, free, abort
-#include <string.h>     // memcpy, memmove, strlen
-#include <errno.h>      // errno
-#include <unistd.h>     // read, write, close
-#include <arpa/inet.h>  // sockaddr_in, htons
-#include <sys/socket.h> // socket, bind, listen, accept, setsockopt
-#include <sys/types.h>  // socklen_t
-#include <netinet/ip.h> // INADDR_ANY
-#include <assert.h>     // assert
-#include <fcntl.h>      // fcntl, O_NONBLOCK
-#include <sys/epoll.h>  // epoll_create1, epoll_ctl, epoll_wait
-#include <vector>       // std::vector
-#include <string>       // std::string
+#include <stdint.h>   
+#include <stdlib.h> 
+#include <string.h>     
+#include <errno.h>      
+#include <unistd.h>   
+#include <arpa/inet.h>  
+#include <sys/socket.h> 
+#include <sys/types.h> 
+#include <netinet/ip.h>
+#include <assert.h>   
+#include <fcntl.h>      
+#include <sys/epoll.h>  
+#include <vector>      
+#include <string>       
 #include <map>
 #include <time.h>
 #include <pthread.h>
 #include "threads.h"
 #include "zset.h"
-// global sorted set store — maps set name → ZSet*
+#include"hashtable.h"
+
 static std::map<std::string, ZSet *> g_zsets;
-// global thread pool — 4 worker threads
+
 static ThreadPool g_pool;
-// serialization type tags
+
 enum SerType
 {
-    SER_NIL = 0, // null response (key not found)
-    SER_ERR = 1, // error with message
-    SER_STR = 2, // string value
-    SER_INT = 3, // 64-bit integer
-    SER_ARR = 4, // array of elements
+    SER_NIL = 0, 
+    SER_ERR = 1,
+    SER_STR = 2, 
+    SER_INT = 3, 
+    SER_ARR = 4, 
 };
 static void out_nil(std::string &out)
 {
@@ -284,11 +284,13 @@ static bool entry_eq(Hnode *lhs, Hnode *rhs)
 static void die(const char *msg)
 {
     int err = errno;
+    fprintf(stderr, "[%d] %s\n", err, msg);
     abort();
 }
 
 static void msg(const char *msg)
 {
+    fprintf(stderr, "%s\n", msg);
 }
 
 static void fd_set_nb(int fd)
